@@ -5,7 +5,7 @@ import java.net.URI;
 import javax.transaction.Transactional;
 
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.maclacerda.aluraflix.models.Video;
+import com.maclacerda.aluraflix.models.Category;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,8 +28,8 @@ import com.maclacerda.aluraflix.models.Video;
 @AutoConfigureTestEntityManager
 @Transactional
 @ActiveProfiles("test")
-public class VideosControllerTest {
-
+class CategoryControllerTest {
+	
 	private MockHttpServletRequestBuilder request;
 	private ResultMatcher expectedResult;
 
@@ -41,14 +41,16 @@ public class VideosControllerTest {
 
 	@Before
 	public void populateDatabase() {
-		Video video = new Video("Video 1", "Add first video in database", "http://www.google.com/video_1", 1L);
+		Category category1 = new Category("Free", "#FF0000");
+		Category category2 = new Category("Front-End", "#FF00FF");
 
-		entityManager.persist(video);
+		entityManager.persist(category1);
+		entityManager.persist(category2);
 	}
 
 	@Test
 	public void testList() throws Exception {
-		URI path = new URI("/videos");
+		URI path = new URI("/categories");
 
 		request = MockMvcRequestBuilders.get(path);
 		expectedResult = MockMvcResultMatchers.status().isOk();
@@ -58,7 +60,7 @@ public class VideosControllerTest {
 
 	@Test
 	public void testDetail() throws Exception {
-		URI path = new URI("/videos/1");
+		URI path = new URI("/categories/1");
 
 		request = MockMvcRequestBuilders.get(path);
 		expectedResult = MockMvcResultMatchers.status().isOk();
@@ -68,7 +70,7 @@ public class VideosControllerTest {
 
 	@Test
 	public void testDetailWithWrongId() throws Exception {
-		URI path = new URI("/videos/99");
+		URI path = new URI("/categories/99");
 
 		request = MockMvcRequestBuilders.get(path);
 		expectedResult = MockMvcResultMatchers.status().isNotFound();
@@ -78,8 +80,8 @@ public class VideosControllerTest {
 
 	@Test
 	public void testAdd() throws Exception {
-		URI path = new URI("/videos");
-		String json = "{\"title\": \"Video 2\", \"description\": \"Description for 2\", \"url\": \"http://www.google.com\"}";
+		URI path = new URI("/categories");
+		String json = "{\"title\": \"Back-end\", \"color\": \"#FEFEFE\"}";
 
 		request = MockMvcRequestBuilders.post(path).content(json).header("Content-Type", "application/json");
 		expectedResult = MockMvcResultMatchers.status().isCreated();
@@ -89,8 +91,8 @@ public class VideosControllerTest {
 
 	@Test
 	public void testUpdate() throws Exception {
-		URI path = new URI("/videos/1");
-		String json = "{\"title\": \"Video Up 1\", \"description\": \"Description Up for 1\", \"url\": \"http://www.google.com/video_1\"}";
+		URI path = new URI("/categories/1");
+		String json = "{\"title\": \"Free Up\"}";
 
 		request = MockMvcRequestBuilders.put(path).content(json).header("Content-Type", "application/json");
 		expectedResult = MockMvcResultMatchers.status().isOk();
@@ -100,7 +102,7 @@ public class VideosControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		URI path = new URI("/videos/1");
+		URI path = new URI("/categories/1");
 
 		request = MockMvcRequestBuilders.delete(path);
 		expectedResult = MockMvcResultMatchers.status().isOk();
@@ -110,7 +112,7 @@ public class VideosControllerTest {
 
 	@Test
 	public void testDeleteWithWrongId() throws Exception {
-		URI path = new URI("/videos/99");
+		URI path = new URI("/categories/99");
 
 		request = MockMvcRequestBuilders.delete(path);
 		expectedResult = MockMvcResultMatchers.status().isNotFound();

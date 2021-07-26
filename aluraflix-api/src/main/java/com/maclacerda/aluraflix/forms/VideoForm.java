@@ -25,6 +25,8 @@ public class VideoForm {
 	@Pattern(regexp="((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)")
 	private String url;
 	
+	private Long categoryID;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -49,8 +51,22 @@ public class VideoForm {
 		this.url = url;
 	}
 
-	public Video converter() {
-		return new Video(title, description, url);
+	public Long getCategoryID() {
+		return categoryID;
+	}
+
+	public void setCategoryID(Long categoryID) {
+		this.categoryID = categoryID;
+	}
+
+	public Video parse() {
+		Long category = 1L;
+		
+		if (categoryID != null) {
+			category = categoryID;
+		}
+		
+		return new Video(title, description, url, category);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.maclacerda.aluraflix.controllers;
 
 import java.net.URI;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -46,21 +47,25 @@ public class VideosController {
 
 		videos = repository.findAll(pagination);
 
-		return VideoDTO.converter(videos);
+		return VideoDTO.parse(videos);
 	}
 
 	@GetMapping("/{id}")
-	public VideoDetailDTO detail(@PathVariable Long id) {
-		Video video = repository.getOne(id);
-
-		return new VideoDetailDTO(video);
+	public ResponseEntity<VideoDetailDTO> detail(@PathVariable Long id) {
+		Optional<Video> video = repository.findById(id);
+		
+		if (video.isPresent()) {
+			return ResponseEntity.ok(new VideoDetailDTO(video.get()));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@PostMapping
 	@Transactional
 	@CacheEvict(value = "videosList", allEntries = true)
 	public ResponseEntity<VideoDTO> add(@RequestBody @Valid VideoForm form, UriComponentsBuilder builder) {
-		Video video = form.converter();
+		Video video = form.parse();
 		repository.save(video);
 
 		URI uri = builder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();

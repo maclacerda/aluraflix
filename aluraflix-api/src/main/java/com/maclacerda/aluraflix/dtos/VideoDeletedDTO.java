@@ -1,15 +1,9 @@
 package com.maclacerda.aluraflix.dtos;
 
-public class VideoDeletedDTO {
-	
-	private String message;
-	
-	public VideoDeletedDTO(String message) {
-		this.message = message;
-	}
+public class VideoDeletedDTO extends EntityDeletedBase {
 
-	public String getMessage() {
-		return message;
+	public VideoDeletedDTO(String message) {
+		super(message);
 	}
 
 }

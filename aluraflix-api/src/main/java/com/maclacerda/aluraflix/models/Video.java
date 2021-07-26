@@ -18,13 +18,15 @@ public class Video {
 	private String description;
 	private String url;
 	private LocalDateTime createdAt = LocalDateTime.now();
+	private Long categoryID;
 	
 	public Video() {}
 	
-	public Video(String title, String description, String url) {
+	public Video(String title, String description, String url, Long categoryID) {
 		this.title = title;
 		this.description = description;
 		this.url = url;
+		this.categoryID = categoryID;
 	}
 
 	public Long getId() {
@@ -65,6 +67,14 @@ public class Video {
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public Long getCategoryID() {
+		return categoryID;
+	}
+
+	public void setCategoryID(Long categoryID) {
+		this.categoryID = categoryID;
 	}
 	
 }

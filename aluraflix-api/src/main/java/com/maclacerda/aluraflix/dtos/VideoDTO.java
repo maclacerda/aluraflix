@@ -44,7 +44,7 @@ public class VideoDTO {
 		return createdAt;
 	}
 
-	public static Page<VideoDTO> converter(Page<Video> videos) {
+	public static Page<VideoDTO> parse(Page<Video> videos) {
 		return videos.map(VideoDTO::new);
 	}
 

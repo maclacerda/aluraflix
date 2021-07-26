@@ -1,0 +1,1 @@
+INSERT INTO CATEGORY(title, color) VALUES('FREE', '#FFFFFF');

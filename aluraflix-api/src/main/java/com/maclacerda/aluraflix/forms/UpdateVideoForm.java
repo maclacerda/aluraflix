@@ -60,5 +60,4 @@ public class UpdateVideoForm {
 		return video;
 	}
 
-
 }
