@@ -1,8 +1,8 @@
 package com.maclacerda.aluraflix.controllers;
 
 import java.net.URI;
-import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -51,13 +51,13 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CategoryDetailDTO> detail(@PathVariable Long id) {
-		Optional<Category> category = repository.findById(id);
+	public ResponseEntity<CategoryDetailDTO> detail(@PathVariable Long id) throws EntityNotFoundException {
+		try {
+			Category category = repository.getOne(id);
 
-		if (category.isPresent()) {
-			return ResponseEntity.ok(new CategoryDetailDTO(category.get()));
-		} else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok(new CategoryDetailDTO(category));
+		} catch (EntityNotFoundException exception) {
+			throw new EntityNotFoundException("Category not found");
 		}
 	}
 
@@ -72,7 +72,7 @@ public class CategoryController {
 
 		return ResponseEntity.created(uri).body(new CategoryDTO(category));
 	}
-	
+
 	@PutMapping("/{id}")
 	@Transactional
 	@CacheEvict(value = "categoriesList", allEntries = true)
@@ -88,12 +88,12 @@ public class CategoryController {
 	public ResponseEntity<CategoryDeletedDTO> delete(@PathVariable Long id) {
 		if (repository.existsById(id)) {
 			repository.deleteById(id);
-			
+
 			return ResponseEntity.ok(new CategoryDeletedDTO("Category deleted successfull"));
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 
 	}
-	
+
 }

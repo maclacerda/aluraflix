@@ -1,8 +1,8 @@
 package com.maclacerda.aluraflix.controllers;
 
 import java.net.URI;
-import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -51,14 +51,15 @@ public class VideosController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<VideoDetailDTO> detail(@PathVariable Long id) {
-		Optional<Video> video = repository.findById(id);
-		
-		if (video.isPresent()) {
-			return ResponseEntity.ok(new VideoDetailDTO(video.get()));
-		} else {
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<VideoDetailDTO> detail(@PathVariable Long id) throws EntityNotFoundException {
+		try {
+			Video video = repository.getOne(id);
+
+			return ResponseEntity.ok(new VideoDetailDTO(video));
+		} catch (EntityNotFoundException exception) {
+			throw new EntityNotFoundException("Video not found");
 		}
+
 	}
 
 	@PostMapping
@@ -72,7 +73,7 @@ public class VideosController {
 
 		return ResponseEntity.created(uri).body(new VideoDTO(video));
 	}
-	
+
 	@PutMapping("/{id}")
 	@Transactional
 	@CacheEvict(value = "videosList", allEntries = true)
@@ -88,12 +89,12 @@ public class VideosController {
 	public ResponseEntity<VideoDeletedDTO> delete(@PathVariable Long id) {
 		if (repository.existsById(id)) {
 			repository.deleteById(id);
-			
+
 			return ResponseEntity.ok(new VideoDeletedDTO("Video deleted successfull"));
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 
 	}
-	
+
 }
