@@ -40,7 +40,7 @@ class CategoryControllerTest {
 	private MockMvc mock;
 
 	@Before
-	public void populateDatabase() {
+	public void setUp() {
 		Category category1 = new Category("Free", "#FF0000");
 		Category category2 = new Category("Front-End", "#FF00FF");
 

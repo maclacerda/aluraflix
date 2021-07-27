@@ -40,10 +40,10 @@ public class VideosControllerTest {
 	private MockMvc mock;
 
 	@Before
-	public void populateDatabase() {
+	public void setUp() {
 		Video video = new Video("Video 1", "Add first video in database", "http://www.google.com/video_1", 1L);
 
-		entityManager.persist(video);
+		entityManager.persistAndFlush(video);
 	}
 
 	@Test
