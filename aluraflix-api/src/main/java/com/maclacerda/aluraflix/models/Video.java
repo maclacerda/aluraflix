@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Video {
@@ -18,15 +19,17 @@ public class Video {
 	private String description;
 	private String url;
 	private LocalDateTime createdAt = LocalDateTime.now();
-	private Long categoryID;
+	
+	@ManyToOne
+	private Category category;
 	
 	public Video() {}
 	
-	public Video(String title, String description, String url, Long categoryID) {
+	public Video(String title, String description, String url, Category category) {
 		this.title = title;
 		this.description = description;
 		this.url = url;
-		this.categoryID = categoryID;
+		this.category = category;
 	}
 
 	public Long getId() {
@@ -69,12 +72,12 @@ public class Video {
 		this.createdAt = createdAt;
 	}
 
-	public Long getCategoryID() {
-		return categoryID;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setCategoryID(Long categoryID) {
-		this.categoryID = categoryID;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
-	
+
 }

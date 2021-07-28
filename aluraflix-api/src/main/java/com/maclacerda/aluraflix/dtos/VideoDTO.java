@@ -13,6 +13,7 @@ public class VideoDTO {
 	private String description;
 	private String url;
 	private LocalDateTime createdAt;
+	private String category;
 	
 	public VideoDTO() {}
 
@@ -22,6 +23,7 @@ public class VideoDTO {
 		this.description = video.getDescription();
 		this.url = video.getUrl();
 		this.createdAt = video.getCreatedAt();
+		this.category = video.getCategory().getTitle();
 	}
 
 	public Long getId() {
@@ -42,6 +44,10 @@ public class VideoDTO {
 	
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
+	}
+
+	public String getCategory() {
+		return category;
 	}
 
 	public static Page<VideoDTO> parse(Page<Video> videos) {

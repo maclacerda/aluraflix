@@ -27,10 +27,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.maclacerda.aluraflix.dtos.CategoryDTO;
 import com.maclacerda.aluraflix.dtos.CategoryDeletedDTO;
 import com.maclacerda.aluraflix.dtos.CategoryDetailDTO;
+import com.maclacerda.aluraflix.dtos.VideoDTO;
 import com.maclacerda.aluraflix.forms.CategoryForm;
 import com.maclacerda.aluraflix.forms.CategoryVideoForm;
 import com.maclacerda.aluraflix.models.Category;
+import com.maclacerda.aluraflix.models.Video;
 import com.maclacerda.aluraflix.repositories.CategoryRepository;
+import com.maclacerda.aluraflix.repositories.VideoRepository;
 
 @RestController
 @RequestMapping("/categories")
@@ -38,6 +41,9 @@ public class CategoriesController {
 
 	@Autowired
 	private CategoryRepository repository;
+	
+	@Autowired
+	private VideoRepository videosRepository;
 
 	@GetMapping
 	@Cacheable(value = "categoriesList")
@@ -59,6 +65,16 @@ public class CategoriesController {
 		} catch (EntityNotFoundException exception) {
 			throw new EntityNotFoundException("Category not found");
 		}
+	}
+
+	@GetMapping("/{id}/videos")
+	public Page<VideoDTO> listVideosByCategorie(@PathVariable Long id,
+			@PageableDefault(direction = Direction.ASC, sort = "title", page = 0, size = 10) Pageable pagination) {
+		Page<Video> videos;
+
+		videos = videosRepository.findByCategoryId(id, pagination);
+
+		return VideoDTO.parse(videos);
 	}
 
 	@PostMapping

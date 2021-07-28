@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.maclacerda.aluraflix.models.Category;
+import com.maclacerda.aluraflix.models.Video;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -45,15 +46,29 @@ class CategoriesControllerTest {
 	public void setUp() {
 		Category category1 = new Category("Free", "#FF0000");
 		Category category2 = new Category("Front-End", "#FF00FF");
+		
+		Video video1 = new Video("Video 1", "Description 1", "https://www.google.com/1", category1);
 
-		entityManager.persist(category1);
-		entityManager.persist(category2);
+		entityManager.persistAndFlush(category1);
+		entityManager.persistAndFlush(category2);
+		
+		entityManager.persistAndFlush(video1);
 	}
 
 	@Test
 	public void testList() throws Exception {
 		URI path = new URI("/categories");
 
+		request = MockMvcRequestBuilders.get(path);
+		expectedResult = MockMvcResultMatchers.status().isOk();
+
+		mock.perform(request).andExpect(expectedResult);
+	}
+	
+	@Test
+	public void listVideosByCategorie() throws Exception {
+		URI path = new URI("/categories/1/videos");
+		
 		request = MockMvcRequestBuilders.get(path);
 		expectedResult = MockMvcResultMatchers.status().isOk();
 

@@ -6,7 +6,9 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.maclacerda.aluraflix.models.Category;
 import com.maclacerda.aluraflix.models.Video;
+import com.maclacerda.aluraflix.repositories.CategoryRepository;
 
 public class VideoForm {
 	
@@ -59,14 +61,16 @@ public class VideoForm {
 		this.categoryID = categoryID;
 	}
 
-	public Video parse() {
+	public Video parse(CategoryRepository repository) {
 		Long category = 1L;
 		
 		if (categoryID != null) {
 			category = categoryID;
 		}
 		
-		return new Video(title, description, url, category);
+		Category videoCategory = repository.getOne(category);
+		
+		return new Video(title, description, url, videoCategory);
 	}
 
 }

@@ -30,6 +30,7 @@ import com.maclacerda.aluraflix.dtos.VideoDetailDTO;
 import com.maclacerda.aluraflix.forms.UpdateVideoForm;
 import com.maclacerda.aluraflix.forms.VideoForm;
 import com.maclacerda.aluraflix.models.Video;
+import com.maclacerda.aluraflix.repositories.CategoryRepository;
 import com.maclacerda.aluraflix.repositories.VideoRepository;
 
 @RestController
@@ -38,6 +39,9 @@ public class VideosController {
 
 	@Autowired
 	private VideoRepository repository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@GetMapping
 	@Cacheable(value = "videosList")
@@ -66,7 +70,7 @@ public class VideosController {
 	@Transactional
 	@CacheEvict(value = "videosList", allEntries = true)
 	public ResponseEntity<VideoDTO> add(@RequestBody @Valid VideoForm form, UriComponentsBuilder builder) {
-		Video video = form.parse();
+		Video video = form.parse(categoryRepository);
 		repository.save(video);
 
 		URI uri = builder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();

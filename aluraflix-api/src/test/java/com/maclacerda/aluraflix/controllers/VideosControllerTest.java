@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.maclacerda.aluraflix.models.Category;
 import com.maclacerda.aluraflix.models.Video;
 
 @RunWith(SpringRunner.class)
@@ -43,7 +44,11 @@ public class VideosControllerTest {
 
 	@Before
 	public void setUp() {
-		Video video = new Video("Video 1", "Add first video in database", "http://www.google.com/video_1", 1L);
+		Category category = new Category("FREE", "#FFFFFF");
+		
+		entityManager.persistAndFlush(category);
+		
+		Video video = new Video("Video 1", "Add first video in database", "http://www.google.com/video_1", category);
 
 		entityManager.persistAndFlush(video);
 	}
