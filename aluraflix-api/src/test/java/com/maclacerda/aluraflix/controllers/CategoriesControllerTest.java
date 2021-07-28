@@ -30,7 +30,7 @@ import com.maclacerda.aluraflix.models.Category;
 @Transactional
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class CategoryControllerTest {
+class CategoriesControllerTest {
 	
 	private MockHttpServletRequestBuilder request;
 	private ResultMatcher expectedResult;

@@ -34,7 +34,7 @@ import com.maclacerda.aluraflix.repositories.CategoryRepository;
 
 @RestController
 @RequestMapping("/categories")
-public class CategoryController {
+public class CategoriesController {
 
 	@Autowired
 	private CategoryRepository repository;
