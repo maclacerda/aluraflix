@@ -62,6 +62,16 @@ public class VideosControllerTest {
 
 		mock.perform(request).andExpect(expectedResult);
 	}
+	
+	@Test
+	public void testSearchByTitle() throws Exception {
+		URI path = new URI("/videos?search=video");
+		
+		request = MockMvcRequestBuilders.get(path);
+		expectedResult = MockMvcResultMatchers.status().isOk();
+
+		mock.perform(request).andExpect(expectedResult);
+	}
 
 	@Test
 	public void testDetail() throws Exception {

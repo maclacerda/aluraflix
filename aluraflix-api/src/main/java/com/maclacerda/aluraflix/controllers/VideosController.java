@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -45,11 +46,14 @@ public class VideosController {
 
 	@GetMapping
 	@Cacheable(value = "videosList")
-	public Page<VideoDTO> list(
-			@PageableDefault(direction = Direction.DESC, sort = "id", page = 0, size = 10) Pageable pagination) {
+	public Page<VideoDTO> list(@RequestParam(name = "search", required = false) String term, @PageableDefault(direction = Direction.DESC, sort = "id", page = 0, size = 10) Pageable pagination) {
 		Page<Video> videos;
-
-		videos = repository.findAll(pagination);
+		
+		if (term != null) {
+			videos = repository.findByTitleContainingIgnoreCase(term, pagination);
+		} else {
+			videos = repository.findAll(pagination);
+		}
 
 		return VideoDTO.parse(videos);
 	}
@@ -65,7 +69,7 @@ public class VideosController {
 		}
 
 	}
-
+	
 	@PostMapping
 	@Transactional
 	@CacheEvict(value = "videosList", allEntries = true)

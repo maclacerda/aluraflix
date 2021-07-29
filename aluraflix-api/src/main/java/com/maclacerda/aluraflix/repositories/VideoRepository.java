@@ -9,5 +9,6 @@ import com.maclacerda.aluraflix.models.Video;
 public interface VideoRepository extends JpaRepository<Video, Long> {
 	
 	Page<Video> findByCategoryId(Long id, Pageable pagination);
+	Page<Video> findByTitleContainingIgnoreCase(String title, Pageable pagination);
 	
 }
